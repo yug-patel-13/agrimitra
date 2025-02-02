@@ -1,6 +1,23 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/" }
+  "builds": [
+    {
+      "src": "web-front/package.json",
+      "use": "@vercel/static-build",
+      "config": { "outputDirectory": "web-front/build" }
+    },
+    {
+      "src": "web-back/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/web-back/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/web-front/build/index.html"
+    }
   ]
 }
