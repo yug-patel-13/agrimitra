@@ -1,0 +1,70 @@
+/* Login.css */
+#forblur{
+  position: relative;
+  height: 100%;
+  width: 100%;
+z-index: 0;
+}
+.login-container {
+  position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+z-index: 1;
+  }
+  @media (max-width:1200px) {
+
+    .login-container{
+        position: relative;
+        z-index: 2;
+        margin-top: 30%;
+    }
+    
+  }
+  .form-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  .toggle-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    margin-top: 10px;
+    display: block;
+  }
+  
+  .green-link {
+    color: #007bff;
+    text-decoration: none;
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .green-link:hover {
+    text-decoration: underline;
+  }
+  #pass,#pswrd{
+    width: 380px;
+  }
