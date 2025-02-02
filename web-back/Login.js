@@ -1,116 +1,103 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const express = require("express");
+const cors = require("cors");
+const mysql2 = require("mysql2");
+const bodyparser = require("body-parser");
 
 const app = express();
-const port = 3000;
+const port = 3111;
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: true }));
 
-// Database connection setup
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'farmer'
+const db = mysql2.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "agritech",
 });
 
-db.connect(err => {
+db.connect((err) => {
   if (err) {
-    console.error('Database connection failed:', err.stack);
+    console.error("Database connection failed", err.stack);
     return;
   }
-  console.log('Connected to database.');
+  console.log("Connected to database.");
 });
 
-// GET route for fetching all data from farmer table (for admin or view purposes)
-app.get('/api/farmer', (req, res) => {
-  const query = 'SELECT * FROM farmer';
+app.get("/", (req, res) => {
+  res.send("connected");
+});
+
+// Fetch all users
+app.get("/api/agritech", (req, res) => {
+  const query = `SELECT * FROM agritech`;
   db.query(query, (err, results) => {
     if (err) {
-      return res.status(500).json({ error: err.message });
+      res.status(500).json({ error: err.message });
+      return;
     }
     res.json(results);
   });
 });
 
-// POST route for inserting new data into farmer table (Sign Up)
-app.post('/api/farmer', (req, res) => {
-  const { name, number, email, cropname, district, cropQuantity, price, description } = req.body;
-
-  // Basic validation
-  if (!name || !email || !number || !cropname || !district) {
-    return res.status(400).json({ error: 'All fields are required' });
-  }
-
-  // Inserting data into farmer table
-  const query = 'INSERT INTO farmer (name, number, email, cropname, district, cropQuantity, price, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-  db.query(query, [name, number, email, cropname, district, cropQuantity, price, description], (err, result) => {
+// Register new user
+app.post("/api/agritech", (req, res) => {
+  const { name, email, password } = req.body;
+  const query = "INSERT INTO agritech (name, email, password) VALUES (?, ?, ?)";
+  db.query(query, [name, email, password], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: err.message });
+      res.status(500).json({ error: err.message });
+      return;
     }
-    res.json({ success: true, message: 'Farmer registered successfully', result });
+    res.json({ id: result.insertId, name, email });
   });
 });
 
-// POST route for user authentication (Sign In)
-app.post('/api/farmer/authenticate', (req, res) => {
+// User login
+app.post("/api/agritech/login", (req, res) => {
   const { email, password } = req.body;
-
-  // Basic validation
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required' });
-  }
-
-  const query = 'SELECT * FROM farmer WHERE email = ? AND password = ?';
+  const query = "SELECT * FROM agritech WHERE email = ? AND password = ?";
   db.query(query, [email, password], (err, results) => {
     if (err) {
-      return res.status(500).json({ error: err.message });
+      res.status(500).json({ error: err.message });
+      return;
     }
-
     if (results.length > 0) {
-      res.json({ success: true, message: 'Login successful!' });
+      res.json({ success: true, user: results[0] });
     } else {
-      res.status(401).json({ success: false, message: 'Invalid email or password' });
+      res.json({ success: false, message: "Invalid email or password" });
     }
   });
 });
 
-// PUT route for updating a farmer's data
-app.put('/api/farmer/:id', (req, res) => {
+// Update user
+app.put("/api/agritech/:id", (req, res) => {
   const { id } = req.params;
-  const { name, email, number, cropname, district, cropQuantity, price, description } = req.body;
-
-  // Basic validation
-  if (!name || !email || !number || !cropname || !district) {
-    return res.status(400).json({ error: 'All fields are required' });
-  }
-
-  const query = 'UPDATE farmer SET name = ?, email = ?, number = ?, cropname = ?, district = ?, cropQuantity = ?, price = ?, description = ? WHERE id = ?';
-  db.query(query, [name, email, number, cropname, district, cropQuantity, price, description, id], (err, result) => {
+  const { name, email, password } = req.body;
+  const query = "UPDATE agritech SET name=?, email=?, password=? WHERE id=?";
+  db.query(query, [name, email, password, id], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: err.message });
+      res.status(500).json({ error: err.message });
+      return;
     }
-    res.json({ success: true, message: 'Farmer updated successfully', result });
+    res.json(result);
   });
 });
 
-// DELETE route for deleting a farmer by ID
-app.delete('/api/farmer/:id', (req, res) => {
+// Delete user
+app.delete("/api/agritech/:id", (req, res) => {
   const { id } = req.params;
-  const query = 'DELETE FROM farmer WHERE id = ?';
+  const query = "DELETE FROM agritech WHERE id=?";
   db.query(query, [id], (err, result) => {
     if (err) {
-      return res.status(500).json({ error: err.message });
+      res.status(500).json({ error: err.message });
+      return;
     }
-    res.json({ success: true, message: 'Farmer deleted successfully', result });
+    res.json(result);
   });
 });
 
-// Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

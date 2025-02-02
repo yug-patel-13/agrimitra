@@ -34,6 +34,8 @@ app.post('/send-buy', async (req, res) => {
   - Number: ${number}
   - Email: ${email}
 
+  farmer wait for your call or email..
+
   Hope your contract will be successful.
 `;
 

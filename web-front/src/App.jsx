@@ -7,6 +7,9 @@ import Farmer from './components/Farmer'
 import Login from './components/Login'
 import AboutUs from './components/Aboutus'
 import Benifits from './components/Benifits'
+import Loginn from './components/Loginn'
+import Admin from './components/Admin'
+
 
 
 
@@ -14,6 +17,7 @@ import Benifits from './components/Benifits'
 
 const App = () => {
   const [ogin,setogin]=useState(false)
+  const [loginchange,setloginchange]=useState("Login")
 
 
 
@@ -21,17 +25,19 @@ const App = () => {
     <>
     <div>
       <Router>
-        <Navbar ogin={ogin} />
+        <Navbar ogin={ogin} loginchange={loginchange} />
       
         <Routes>
  
       <Route path='/help' element={<Help/>}></Route>
       <Route path='/farmer' element={<Farmer/>}></Route>
-      <Route path='/login' element={<Login  setogin={setogin}/>}></Route>
+      <Route path='/login' element={<Login  setogin={setogin} setloginchange={setloginchange}/>}></Route>
     
       <Route path='/aboutus' element={<AboutUs/>}></Route>
 
       <Route path='/demo' element={<Benifits/>}></Route>
+      <Route path='/Loginn' element={<Loginn setloginchange={setloginchange}/>}></Route>
+      <Route path='/admin' element={<Admin/>}></Route>
    
         </Routes>
      

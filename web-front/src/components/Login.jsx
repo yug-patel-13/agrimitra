@@ -1,106 +1,81 @@
 import React, { useState } from 'react';
-import './Login.css';
-import axios from "axios";
+import axios from 'axios';
+import "./Login.css";
+import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-const Login = ({ setogin }) => {
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [namee, setname] = useState("");
-  const [eemail, setemail] = useState("");
-  const [ppass, setpass] = useState("");
 
-  const togglePanel = () => {
-    setIsSignUp(!isSignUp);
-  };
+const Login = ({setloginchange}) => {
+  const [t]=useTranslation("global")
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
 
-    if (!eemail || !ppass || (isSignUp && !namee)) {
-      alert("Please fill out all fields");
-      return;
+
+  const handleSubmit = async () => {
+    if(!name || !email || !password){
+
+      alert("please fill the full information")
+      return
+      
     }
+    else{
+      navigate("/Farmer");
+      alert("login successfully")
+
+    }
+    setloginchange("welcome")
 
     try {
-      // If SignUp: Insert new user into the agritech database
-      if (isSignUp) {
-        const response = await axios.post('http://localhost:3000/api/agritech', {
-          name: namee, 
-          email: eemail, 
-          password: ppass
-        });
-
-        alert('Account created successfully!');
-        setname('');
-        setemail('');
-        setpass('');
+      const response = await axios.post("http://localhost:3111/api/agritech", {
+        name,
+        email,
+        password,
+      });
+      
+      if (response.status === 200) {
+        
+        setEmail('');
+        setName('');
+        setPassword('');
       } else {
-        // If SignIn: Authenticate user
-        const response = await axios.post('http://localhost:3000/api/agritech/authenticate', {
-          email: eemail, 
-          password: ppass
-        });
-
-        if (response.data.success) {
-          alert('Logged in successfully!');
-          setogin("welcome");
-        } else {
-          alert('Invalid email or password');
-        }
+       alert("invalid")
       }
-    } catch (error) {
-      // If the user is signing up and the email already exists
-      if (isSignUp && error.response && error.response.status === 400) {
-        alert('User already exists. Please log in.');
-      } else {
-        alert('Error occurred while processing your request');
-      }
+    } catch (err) {
+    alert("error occures")
     }
   };
 
+
+
   return (
-    <>
-    <div id='forblur'>
-    <div className="login-container">
-      <div className={`form-container ${isSignUp ? 'sign-up' : 'sign-in'}`}>
-        <form onSubmit={handleSubmit}>
-          <h1>{isSignUp ? 'Create Account' : 'Sign In'}</h1>
-          {isSignUp && (
-            <input
-              type="text"
-              placeholder="Name"
-              id="nm"
-              value={namee}
-              onChange={(e) => setname(e.target.value)}
-            />
-          )}
-          <input
-            type="email"
-            placeholder="Email"
-            id={isSignUp ? "eml" : "em"}
-            value={eemail}
-            onChange={(e) => setemail(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            id={isSignUp ? "pswrd" : "pass"}
-            value={ppass}
-            onChange={(e) => setpass(e.target.value)}
-          />
-          <button className="green-button" type="submit" style={{background:"green", color:"white"}}>
-            {isSignUp ? 'Sign Up' : 'Sign In'}
-          </button>
-        </form>
-        <button className="toggle-button" onClick={togglePanel} >
-          {isSignUp ? 'Already have an account? Sign In' : 'New here? Sign Up'}
-        </button>
-        {!isSignUp && ( 
-          <a href="#footer" className="green-link">Forgot your password?</a>
-        )}
+    <div id='boxpass'>
+      <div id="namebox">
+        <h1>{t("loginnn.name")}</h1>
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
       </div>
+
+      <div id="emailbox">
+        <h1>{t("loginnn.email")}</h1>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </div>
+
+      <div id="passbox">
+        <h1>{t("loginnn.password")}</h1>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </div>
+
+      <div id="btnbox">
+       <button onClick={handleSubmit} id='bbutton' style={{height:"30px",width:"70px",background:"green",color:"white"}}>Submit</button>
+      </div>
+
+      <Link to="/Loginn">{t("loginnn.already")}</Link>
+
+    
     </div>
-    </div>
-    </>
+  
   );
 };
 

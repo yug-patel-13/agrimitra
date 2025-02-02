@@ -1,5 +1,6 @@
 .Nav {
   position: fixed;
+ 
   top: 0;
   width: 100%;
   background-color: #333;
@@ -29,7 +30,7 @@ left: 0px;
     display: flex;
     flex-wrap: wrap;
    align-items: center;
-   justify-content: flex-end;
+   justify-content: center;
   z-index:1;   
  background-color: green;
  width: 100%;
@@ -62,11 +63,9 @@ flex-wrap: wrap;
 
 #links {
 position: relative;
-  top: 0; /* Adjust the top value as needed */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  top: 0 /* Adjust the top value as needed */
+ 
+ 
 
 }
 
@@ -99,3 +98,68 @@ position: relative;
   height: 150px;
 }
 
+#btn1lan{
+  top: 30%;
+  height: 20px;
+  width: 60px;
+  background-color: blue;
+  color: white;
+  border: none;
+
+}
+
+#con{
+
+  display: flex;
+  justify-content: center;
+  
+  position: relative;
+  
+  
+}
+
+
+
+@media (max-width:1200px) {
+
+  #links{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+#login{
+  position: relative;
+  left: 12%;
+}
+#lgo{
+  position: relative;
+  left:32%;
+}
+}
+#btn1lan{
+  border: none;
+  height: 30px;
+  width: 70px;
+  border-radius: 10px;
+  border-bottom: 2px solid yellow;
+}
+#btn2lan{
+  border: none;
+  height: 30px;
+  width: 70px;
+  border-radius: 10px;
+  background-color: red;
+  margin-left: 10px;
+  color: aliceblue;
+  border-bottom: 2px solid yellow;
+}
+#btn1lan:hover,#btn2lan:hover{
+  background-color: greenyellow;
+  color: black;
+}
+#langbtn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}

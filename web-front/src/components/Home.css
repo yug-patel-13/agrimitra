@@ -8,7 +8,7 @@ body {
 #content {
     scroll-behavior: smooth;
     position: relative;
-   margin-top: 100px;
+   margin-top: 200px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,7 +16,7 @@ body {
 
     transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
     color: white;
-   
+    animation: fadeIn 1s ease-in-out;
 
 }
 
@@ -332,7 +332,9 @@ margin-top: 300px;
     font-size: 30px;
 }
 #mer{
-    display: none;
+    width: 250px;
+    height: 200px;
+    font-size: smaller;
 }
     
 }
